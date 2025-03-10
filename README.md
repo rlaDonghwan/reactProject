@@ -8,10 +8,9 @@ npm i -D @types/chance @types/luxon
 
 <details>
 <summary><strong>1. 리액트 동작 원리 </strong></summary>
+</details>
 
 ---
-
-</details>
 
 <details>
 <summary><strong>2. 컴포넌트 CSS 스타일링 </strong></summary>
