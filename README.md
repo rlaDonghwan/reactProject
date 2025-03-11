@@ -367,6 +367,43 @@ const App = () => {
 
 ---
 
+# key와 children 속성 이해하기
+
+### key 속성 설정하기
+
+```tsx
+export default function App() {
+  const texts1 = [<p>hello</p>, <p>world</p>]; //key 속성 미사용
+  const texts2 = [<p key="1">hello</p>, <p key="2">world</p>]; //key 속성 사용
+  return <div>{texts}</div>;
+}
+
+export default function App() {
+  const texts = ["hello", "world"].map((text, index) => (
+    <p key={index}>{text}</p>
+  ));
+  return <div>{texts}</div>;
+}
+```
+
+key 속성은 같은 이름의 컴포넌트가 여러 개일 때 이들을 구분하려고 리액트 프레임워크가 만든 속성이다.
+App은 <p> 요소를 2개 사용하므로 리액트 프레임 워크는 이 둘을 구분하려고 중복되지 않은 고유한 값의 key 속성 값을 요구한다.
+
+---
+
+### children 속성 설정하기
+
+**children은** <div> 처럼 자식 요소를 포함할 수 있는 컴포넌트에서만 사용할 수 있다. 즉 <img>,<input> 처럼 자식 요소를 포함할 수 없는 컴포넌트에서 **children을** 사용할 수 없다. 다음 코드는 <p>와 <div> 요소의 **children** 속성에 자식 요소를 설정했다.
+
+```tsx
+export default function App() {
+  const texts = ["hello", "world"].map((text, index) => (
+    <p key={index} children={text} />
+  ));
+  return <div children={text} />;
+}
+```
+
 </details>
 
 ---
