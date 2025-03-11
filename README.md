@@ -404,6 +404,39 @@ export default function App() {
 }
 ```
 
+---
+
+### 컴포넌트 내부에서 children 속성 사용하기
+
+```tsx
+import type { FC, ReactNode } from "react";
+
+export type PProps = {
+  children?: ReactNode;
+};
+
+const P: FC<PProps> = (props) => {
+  const { children } = props;
+  return <p children={children} />;
+};
+
+export default P;
+//-------------------------
+//App.tsx P컴포넌트 사용
+import P from "./P";
+
+export default function App() {
+  const texts = ["hello", "world"].map((text, index) => (
+    <P key={index} children={text} />
+  ));
+  return <div children={texts} />;
+}
+```
+
+---
+
+### JSX{...props}
+
 </details>
 
 ---
