@@ -393,7 +393,7 @@ App은 <p> 요소를 2개 사용하므로 리액트 프레임 워크는 이 둘�
 
 ### children 속성 설정하기
 
-**children은** <div> 처럼 자식 요소를 포함할 수 있는 컴포넌트에서만 사용할 수 있다. 즉 <img>,<input> 처럼 자식 요소를 포함할 수 없는 컴포넌트에서 **children을** 사용할 수 없다. 다음 코드는 <p>와 <div> 요소의 **children** 속성에 자식 요소를 설정했다.
+**children은** <div> 처럼 자식 요소를 포함할 수 있는 컴포넌트에서만 사용할 수 있다. 즉 `<img>,<input>` 처럼 자식 요소를 포함할 수 없는 컴포넌트에서 **children을** 사용할 수 없다. 다음 코드는 <p>와 <div> 요소의 **children** 속성에 자식 요소를 설정했다.
 
 ```tsx
 export default function App() {
@@ -435,7 +435,181 @@ export default function App() {
 
 ---
 
-### JSX{...props}
+### JSX `{...props}` 구문
+
+JSX의 `{...props}` 구문은 객체를 확장할 때 사용하는 자바스크립트의 전개 연산자(spread operator)를 활용한다. 컴포넌트의 props에 포함된 여러 속성을 한번에 간단히 전달할 때 유용하다.
+
+예시 코드:
+
+```tsx
+const P: FC<PProps> = (props) => {
+  return <p {...props} />;
+};
+```
+
+위 코드에서 `{...props}` 는 props가 가진 모든 속성을 한 번에 `<p>` 태그로 전달한다.
+
+---
+
+### PropsWithChildren 타입과 children 속성
+
+리액트는 17 버전까지는 함수형 컴포넌트(FC)에 `children` 속성을 기본적으로 포함했지만, 리액트 18 버전부터는 제거되었다. 대신 리액트는 **PropsWithChildren** 이라는 새로운 제네릭 타입을 제공한다.
+
+- `children?: ReactNode` 부분이 PropsWithChildren 타입으로 대체되었다.
+
+다음은 **PropsWithChildren** 타입을 활용한 예제이다.
+
+```tsx
+import type { FC, PropsWithChildren } from "react";
+
+export type PProps = {};
+
+const P: FC<PropsWithChildren<PProps>> = (props) => {
+  return <p>{props.children}</p>;
+};
+
+export default P;
+```
+
+이 방식을 사용하면 사용자 정의 컴포넌트에서 `children` 속성을 안전하게 사용할 수 있다.
+
+---
+
+# 이벤트 속성 이해하기
+
+- 모든 HTML 요소는 `onmouseenter, onmouseover` 처럼 'on'으로 시작하는 속성을 제공하는데, 이를 **이번트 속성**이라고 한다.
+
+### 이벤트란?
+
+- 리액트를 비롯해 화면 UI를 다루는 모든 프레임워크는 사용자가 화면 UI에서 버튼을 누르거나 텍스트를 입력하는 등의 행위가 발생하면 이를 화면 UI를 구현한 코드 쪽에 알려 줘야 한다. 이 처럼 마우스 클릭 텍스트 입력과 같은 사용자 행위가 일어날 떄 **이벤트가** 발생했다고 한다.
+
+### Event 타입
+
+- 웹 브라우저의 자바스크립트 엔진은 Event 타입을 제공한다.
+
+| 종류              | 설명                                                                                                |
+| ----------------- | --------------------------------------------------------------------------------------------------- |
+| **type**          | 이벤트 이름으로 대소 문자를 구분하지 않습니다.                                                      |
+| **isTrusted**     | 이벤트가 웹 브라우저에서 발생한 것인지(`true`), 프로그래밍으로 발생한 것인지(`false`)를 판단합니다. |
+| **target**        | 이벤트가 처음 발생한 **HTML 요소**입니다.                                                           |
+| **currentTarget** | 이벤트의 현재 대상, 즉 이벤트 버블링 중에서 이벤트가 현재 위치한 객체입니다.                        |
+| **bubbles**       | 이벤트가 **DOM**을 타고 버블링될지 여부를 결정합니다.                                               |
+
+아래 코드는 이름이 click(type 속성값이 'click')인 Event 객체를 생성하는 예
+
+```tsx
+new Event("click", { bubbles: true });
+```
+
+---
+
+### EventTarget 타입
+
+모든 HTML 요소는 `HTMLElement` 상속 타입을 가지며, `HTMLElement`는 최상위 `EventTarget` 타입을 시작으로 `Node`, `Element`와 같은 타입을 상속받는다. 즉, 모든 HTML 요소는 `EventTarget` 타입이 정의하는 속성과 메서드를 포함하고 있다. 또한, 브라우저 객체 모델(BOM)에서 `Window` 타입도 `EventTarget`을 상속한다.
+
+```
+EventTarget
+   |
+   v
+Node
+   |
+   v
+Element
+   |
+   v
+HTMLElement
+```
+
+---
+
+### 이벤트 처리기 (Event Handling)
+
+`EventTarget`은 다음과 같은 3개의 메서드를 제공한다:
+
+- `addEventListener`
+- `removeEventListener`
+- `dispatchEvent`
+
+### `addEventListener`
+
+이름에서 알 수 있듯이 `addEventListener`는 *이벤트 + 귀를 기울여 듣기*라는 의미를 가진다. 프로그래밍에서 이런 *귀 기울여 듣기*를 구현하는 메커니즘은 **콜백 함수**를 사용한다. 이러한 이벤트를 기다리는 콜백 함수를 **이벤트 처리기(event handler)** 라고 한다.
+
+이벤트 처리기는 특정 이벤트가 발생할 때까지 대기하고 있다가, 이벤트가 발생하면 해당 이벤트를 코드로 전달하는 역할을 한다. `addEventListener` 메서드는 하나의 이벤트에 여러 개의 이벤트 처리기를 부착할 수 있도록 지원한다.
+
+#### `addEventListener` 사용법
+
+```javascript
+DOM_객체.addEventListener(이벤트_이름: string, 콜백_함수: (e: Event) => void)
+```
+
+### Window 객체와 `addEventListener`
+
+브라우저 객체 모델(BOM)에서 `window` 객체는 `Window` 타입이며, `Window` 타입은 `EventTarget`을 상속합니다. 따라서 `window` 객체에서도 `addEventListener` 메서드를 사용할 수 있다.
+
+예제 코드:
+
+```javascript
+window.addEventListener("resize", (event) => {
+  console.log("윈도우 크기가 변경되었습니다.", event);
+});
+```
+
+---
+
+### 이벤트 리스너 (Event Listener)
+
+#### 기본 이벤트 리스너 예제
+
+```javascript
+window.addEventListener("click", (e: Event) =>
+  console.log("mouse click occurs.")
+);
+```
+
+이벤트 리스너는 특정 이벤트(예: `click`)가 발생했을 때 실행되는 코드를 정의한다.
+
+---
+
+#### `getElementById`를 이용한 이벤트 리스너 등록
+
+리액트 프로젝트에서는 `public` 디렉터리의 `index.html` 파일에 `<div id="root">` 태그를 포함하고 있으므로, 아래처럼 이벤트 리스너를 등록할 수 있다.
+
+```javascript
+document.getElementById("root")?.addEventListener("click", (e: Event) => {
+  const { isTrusted, target, bubbles } = e;
+  console.log("mouse click occurs.", isTrusted, target, bubbles);
+});
+```
+
+#### 옵션 체이닝(Optional Chaining)
+
+위 코드에서 `?.` 연산자는 **옵셔널 체이닝(Optional Chaining)** 연산자로, `getElementById('root')`가 `null`을 반환할 경우 `addEventListener`를 호출하지 않도록 방지한다.
+
+---
+
+#### `src/pages/EventListener.tsx` 파일의 이벤트 리스너 코드
+
+아래 코드는 `<div id="root">` 태그에 두 개의 `click` 이벤트 리스너를 등록한다.
+
+```tsx
+// src/pages/EventListener.tsx
+
+document.getElementById("root")?.addEventListener("click", (e: Event) => {
+  const { isTrusted, target, bubbles } = e;
+  console.log("mouse click occurs.", isTrusted, target, bubbles);
+});
+
+document.getElementById("root")?.addEventListener("click", (e: Event) => {
+  const { isTrusted, target, bubbles } = e;
+  console.log("mouse click also occurs.", isTrusted, target, bubbles);
+});
+
+export default function EventListener() {
+  return <div>EventListener</div>;
+}
+```
+
+이 코드에서는 `<div id="root">` 요소에 두 개의 `click` 이벤트 리스너를 부착하여 클릭 이벤트가 발생할 때마다 두 개의 콘솔 로그가 실행된다.
 
 </details>
 
