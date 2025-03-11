@@ -1,4 +1,4 @@
-# reactProject
+# 리엑트 배우기
 
 npx create-react-app 프로젝트명 --template typescript --no-git
 
@@ -23,8 +23,8 @@ npm i -D @types/chance @types/luxon
 
 ### 문서 객체 모델이란?
 
-- HTML 형식의 문자열을 화면에 출력할 때, 문자열을 분석하여 자바스크립트 객체 조합으로 변환합니다. 이 자바스크립트 객체 조합을 **문서 객체 모델(DOM)**이라고 합니다.
-- 웹 브라우저의 자바스크립트 엔진은 `window`라는 전역 변수를 기본으로 제공합니다. `window` 객체는 웹 브라우저의 특정 웹 페이지를 의미하며, `Window` 타입 객체로서 브라우저 객체 모델(BOM)을 구성합니다.
+- HTML 형식의 문자열을 화면에 출력할 때, 문자열을 분석하여 자바스크립트 객체 조합으로 변환합니다. 이 자바스크립트 객체 조합을 **문서 객체 모델(DOM)**이라고 한다.
+- 웹 브라우저의 자바스크립트 엔진은 `window`라는 전역 변수를 기본으로 제공합니다. `window` 객체는 웹 브라우저의 특정 웹 페이지를 의미하며, `Window` 타입 객체로서 브라우저 객체 모델(BOM)을 구성한다.
 
 #### document 객체
 
@@ -49,7 +49,7 @@ npm i -D @types/chance @types/luxon
 
 위 코드에서 `newDiv` 변수의 타입은 무엇일까요? `HTMLElement`는 모든 종류의 HTML 요소가 구현하는 인터페이스입니다. 일부 요소는 이 인터페이스를 직접 구현하지만, 대부분의 요소는 `HTMLElement`를 상속한 자신들의 인터페이스를 구현합니다. 인터페이스 이름은 `HTML요소명Element` 형태의 규칙을 따릅니다. 따라서 `newDiv` 객체의 타입은 `HTMLDivElement`입니다.
 
-#### HTMLElement 부모 요소 상속 구조 58P
+---
 
 #### JS만 사용하는 프런트엔드 개발(물리 DOM)
 
@@ -60,6 +60,8 @@ pPhysicalDOM.innerText = "Hello physical DOM world!";
 document.body.appendChild(pPhysicalDOM);
 ```
 
+---
+
 #### 리액트를 사용하는 프런트엔드 개발(가상 DOM)
 
 ```javascript
@@ -68,6 +70,245 @@ let pVirtualDOM = React.createElement('p', null, 'Hello, React!')
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(pVirtualDOM)
 ```
+
+---
+
+### JSX 구문 이해하기
+
+#### React.createElement 호출의 복잡성 문제
+
+```typescript
+import ReactDOM from "react-dom/client";
+const rootVirtualDOM = (
+  <ul>
+    <li>
+      <a href="https://www.naver.com">네이버</a>
+      <p>네이버 홈페이지</p>
+    </li>
+  </ul>
+);
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(rootVirtualDOM);
+```
+
+---
+
+#### JSX = JavaScript + XML
+
+- JSX는 XML 구문에 자바스크립트 코드를 결합하여 용도로 만들어진 구문입니다. 앞서 언급한 대로 JSX는 **React.createElement** 호출 코드를 간결하게 하려고 고안했다.
+
+---
+
+### 컴포넌트 이해하기
+
+- 컴포넌트는 가상 DOM, JSX와 함께 리액트의 핵심 기능이다. 리액트에서 컴포넌트는 두 종류로 **클래스 컴포넌트**와 **함수 컴포넌트**가 있다.
+
+---
+
+#### 컴포넌트란?
+
+**컴포넌트(component)** 는 객체지향 언어의 원조인 **스몰토크(Smalltalk)** 에서 유래한 매우 오래된 용어입니다. 스몰토크에서 컴포넌트는 화면 UI를 처리하는 클래스를 의미합니다. 스몰토크 설계 이론에 따르면 컴포넌트는 **모델-뷰-컨트롤러(model-view-controller, MVC)** 설계 지침에 따라 구현된 클래스여야 한다.
+
+- **모델(Model)**: 앱의 데이터 부분을 의미한다.
+- **뷰(View)**: 모델을 화면에 렌더링하는 부분이다.
+- **컨트롤러(Controller)**: 사용자의 키보드와 마우스 입력을 수신받아 모델과 뷰에 적절한 형태로 반영하는 역할을 한다.
+
+스몰토크 컴포넌트 개념은 매우 일반적이어서 사실 거의 모든 프로그래밍 언어와 프레임워크는 이 개념을 그대로 빌려서 사용하고 있습니다. 리액트에서 컴포넌트 또한 스몰토크의 컴포넌트와 개념적으로 같습니다.
+다만 리액트는 16.8 버전 이후 **리액트 훅(react hooks)** 이라는 새로운 메커니즘을 고안해 내면서 객체지향 언어에서 의미하는 클래스가 아니라 단순한 함수 형태로도 컴포넌트를 구현할 수 있게 되었다. 또한 리액트 팀은 가능한 한 함수 컴포넌트와 리액트 훅을 사용하라고 권장한다.
+
+## 리액트 컴포넌트와 사용자 컴포넌트
+
+리액트에서 사용하는 **컴포넌트(Component)** 라는 용어는 다음과 같이 두 가지 의미를 포함합니다.
+
+- **리액트 제공 컴포넌트(리액트 컴포넌트)**
+- **사용자가 구현하는 사용자 정의 컴포넌트(사용자 컴포넌트)**
+
+리액트 컴포넌트의 이름은 `div`, `h1`처럼 첫 글자를 소문자로 시작하는 반면, 사용자 컴포넌트의 이름은 **MyComponent**처럼 첫 글자를 대문자로 시작하는 **카멜 표기법(camel-case notation)** 을 따른다.
+
+---
+
+### 리액트 컴포넌트
+
+리액트는 HTML5의 각 태그에 대응하는 리액트 컴포넌트를 제공한다.
+
+예시 JSX 코드:
+
+```jsx
+const h1 = <h1>Hello world!</h1>;
+```
+
+위 코드는 사실 아래와 같은 코드로 변환된다.
+
+```jsx
+const h1 = React.createElement("h1", null, "Hello world!");
+```
+
+리액트는 HTML5 태그에 해당하는 컴포넌트 이름을 매번 임포트하지 않아도 되도록 설계되었다.
+
+> **잘못된 예시 (이렇게 하면 번거롭습니다.)**
+>
+> ```jsx
+> import { h1, h2, div, span } from "react";
+> ```
+
+---
+
+### 사용자 컴포넌트
+
+리액트는 사용자 정의 컴포넌트를 생성할 수 있도록 지원한다. 사용자 컴포넌트 이름은 반드시 **카멜 표기법(camel-case notation)** 을 따른다. (예: `MyComponent`)
+
+사용자 컴포넌트의 이름은 대문자로 시작하는 카멜 표기법을 사용해야 한다.
+
+예시:
+
+```tsx
+export default function App() {
+  return (
+    <ul>
+      <li>
+        <a href="http://www.google.com">
+          <p>go to Google</p>
+        </a>
+      </li>
+    </ul>
+  );
+}
+```
+
+사용자 컴포넌트를 활용하는 이유는 JSX 문이나 React.createElement 호출을 통해 생성하는 가상 DOM 생성 코드를 사용자 컴포넌트 쪽으로 이동하여 코드를 간결화하기 위함
+
+---
+
+### 클래스 컴포넌트 만들기
+
+리액트에서는 반드시 react 패키지가 제공하는 **Component 클래스**를 상속하여 클래스 기반 컴포넌트를 구현해야 한다.
+
+```jsx
+import React, { Component } from "react";
+export default class ClassComponent extends Component {}
+```
+
+Component를 상속한 클래스 컴포넌트는 반드시 `render` 메서드를 포함해야 한다.
+
+예시 코드:
+
+```jsx
+import { Component } from "react";
+
+export default class ClassComponent extends Component {
+  render() {
+    return null;
+  }
+}
+```
+
+#### 클래스 컴포넌트의 JSX 예시
+
+```tsx
+import {Component} from 'react'
+
+export default class App extends Component {
+  render() {
+    return (
+      <ul>
+        <li>
+          <a href="http://www.google.com">
+            <p>go to Google</p>
+          </a>
+      </li>
+    </ul>
+  )
+}
+```
+
+---
+
+### JSX 구문과 조건부 렌더링
+
+클래스 컴포넌트 내에서는 JSX뿐만 아니라 일반적인 타임스크립트 코드를 함께 작성할 수 있다.
+
+예시 코드 (조건부 렌더링):
+
+```tsx
+import {Component} from 'react'
+
+export default class App extends Component {
+  render() {
+    const isLoading = true
+
+    if (isLoading) return <p>loading...</p>
+
+    const children = (
+      <li>
+        <a href="http://www.google.com">
+          <p>go to Google</p>
+        </a>
+      </li>
+    )
+
+    return (
+      <div>
+        {isLoading && <p>loading...</p>}
+        {!isLoading && <ul>{children}</ul>}
+      </div>
+    )
+}
+```
+
+혹은 삼항 연산자로 조건부 JSX 구문을 관리할 수도 있다.
+
+```tsx
+import { Component } from "react";
+
+export default class App extends Component {
+  render() {
+    const isLoading = true;
+    const children = isLoading ? (
+      <p>loading...</p>
+    ) : (
+      <ul>
+        <li>
+          <a href="http://www.google.com">
+            <p>go to Google</p>
+          </a>
+        </li>
+      </ul>
+    );
+
+    return <div>{children}</div>;
+  }
+}
+```
+
+---
+
+### 사용자 컴포넌트의 재사용성
+
+사용자 컴포넌트는 재사용 가능성을 높여주는 핵심 기능
+
+예시 (사용자 컴포넌트 사용):
+
+```jsx
+// App.tsx
+import { Component } from "react";
+import ClassComponent from "./ClassComponent";
+
+export default class App extends Component {
+  render() {
+    return (
+      <ul>
+        <ClassComponent href="http://www.google.com" text="go to Google" />
+        <ClassComponent href="https://twitter.com" text="go to Twitter" />
+      </ul>
+    );
+  }
+}
+```
+
+이러한 방식은 리액트 프레임워크가 제공하는 '속성(props)'을 사용하여, 사용자 컴포넌트의 유연성과 재사용성을 극대화할 수 있다.
 
 </details>
 
