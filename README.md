@@ -26,15 +26,15 @@ npm i -D @types/chance @types/luxon
 - HTML 형식의 문자열을 화면에 출력할 때, 문자열을 분석하여 자바스크립트 객체 조합으로 변환합니다. 이 자바스크립트 객체 조합을 **문서 객체 모델(DOM)**이라고 한다.
 - 웹 브라우저의 자바스크립트 엔진은 `window`라는 전역 변수를 기본으로 제공합니다. `window` 객체는 웹 브라우저의 특정 웹 페이지를 의미하며, `Window` 타입 객체로서 브라우저 객체 모델(BOM)을 구성한다.
 
-#### document 객체
+### document 객체
 
 - HTML 문서를 화면에 출력할 때 window 객체는 document라는 이름의 속성 객체로 HTML 문서 기능을 사용할 수 있게 해줍니다. HTML 문서의 HTML 요소는 오직 1개만 있어야 하므로, window.document(혹은 줄여서 그냥 document)는 html 요소를 의미한다.
 
-#### document.head와 document.body 객체
+### document.head와 document.body 객체
 
 - html 요소는 head와 body 태그를 1개씩만 가질 수 있다. document 객체는 이런 조건에 맞추어 `head` 요소를 의미하는 `head` 속성 객체와 `body` 요소를 의미하는 `body` 속성 객체를 제공한다.
 
-#### document.createElement 메서드
+### document.createElement 메서드
 
 - DOM은 다양한 인터페이스를 각각의 목적에 맞게 구현한 객체로 생성할 수 있도록 document.createElement 메서드를 제공한다. 다음은 MDN(Mozilla development network)에서 발췌한 createElement의 사용법이다.
 
@@ -45,13 +45,13 @@ npm i -D @types/chance @types/luxon
   let newDiv = document.createElement('div');
 ```
 
-#### HTMLElement 인터페이스
+### HTMLElement 인터페이스
 
 위 코드에서 `newDiv` 변수의 타입은 무엇일까요? `HTMLElement`는 모든 종류의 HTML 요소가 구현하는 인터페이스입니다. 일부 요소는 이 인터페이스를 직접 구현하지만, 대부분의 요소는 `HTMLElement`를 상속한 자신들의 인터페이스를 구현합니다. 인터페이스 이름은 `HTML요소명Element` 형태의 규칙을 따릅니다. 따라서 `newDiv` 객체의 타입은 `HTMLDivElement`입니다.
 
 ---
 
-#### JS만 사용하는 프런트엔드 개발(물리 DOM)
+### JS만 사용하는 프런트엔드 개발(물리 DOM)
 
 ```javascript
 //물리 DOM에 직접 렌더링
@@ -62,7 +62,7 @@ document.body.appendChild(pPhysicalDOM);
 
 ---
 
-#### 리액트를 사용하는 프런트엔드 개발(가상 DOM)
+### 리액트를 사용하는 프런트엔드 개발(가상 DOM)
 
 ```javascript
 //가상 DOM에 렌더링
@@ -73,9 +73,9 @@ root.render(pVirtualDOM)
 
 ---
 
-### JSX 구문 이해하기
+## JSX 구문 이해하기
 
-#### React.createElement 호출의 복잡성 문제
+### React.createElement 호출의 복잡성 문제
 
 ```typescript
 import ReactDOM from "react-dom/client";
@@ -96,7 +96,7 @@ root.render(rootVirtualDOM);
 
 ---
 
-#### JSX = JavaScript + XML
+### JSX = JavaScript + XML
 
 - JSX는 XML 구문에 자바스크립트 코드를 결합하여 용도로 만들어진 구문입니다. 앞서 언급한 대로 JSX는 **React.createElement** 호출 코드를 간결하게 하려고 고안했다.
 
@@ -108,7 +108,7 @@ root.render(rootVirtualDOM);
 
 ---
 
-#### 컴포넌트란?
+### 컴포넌트란?
 
 **컴포넌트(component)** 는 객체지향 언어의 원조인 **스몰토크(Smalltalk)** 에서 유래한 매우 오래된 용어입니다. 스몰토크에서 컴포넌트는 화면 UI를 처리하는 클래스를 의미합니다. 스몰토크 설계 이론에 따르면 컴포넌트는 **모델-뷰-컨트롤러(model-view-controller, MVC)** 설계 지침에 따라 구현된 클래스여야 한다.
 
@@ -119,7 +119,7 @@ root.render(rootVirtualDOM);
 스몰토크 컴포넌트 개념은 매우 일반적이어서 사실 거의 모든 프로그래밍 언어와 프레임워크는 이 개념을 그대로 빌려서 사용하고 있습니다. 리액트에서 컴포넌트 또한 스몰토크의 컴포넌트와 개념적으로 같습니다.
 다만 리액트는 16.8 버전 이후 **리액트 훅(react hooks)** 이라는 새로운 메커니즘을 고안해 내면서 객체지향 언어에서 의미하는 클래스가 아니라 단순한 함수 형태로도 컴포넌트를 구현할 수 있게 되었다. 또한 리액트 팀은 가능한 한 함수 컴포넌트와 리액트 훅을 사용하라고 권장한다.
 
-## 리액트 컴포넌트와 사용자 컴포넌트
+### 리액트 컴포넌트와 사용자 컴포넌트
 
 리액트에서 사용하는 **컴포넌트(Component)** 라는 용어는 다음과 같이 두 가지 의미를 포함합니다.
 
@@ -205,7 +205,7 @@ export default class ClassComponent extends Component {
 }
 ```
 
-#### 클래스 컴포넌트의 JSX 예시
+### 클래스 컴포넌트의 JSX 예시
 
 ```tsx
 import {Component} from 'react'
