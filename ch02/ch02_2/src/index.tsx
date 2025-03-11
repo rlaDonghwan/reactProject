@@ -30,7 +30,7 @@ const rootVirtualDOM2 = <ul>{children}</ul> // JSX 문법을 사용하여 Virtua
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
-root.render(rootVirtualDOM2)
-// root.render(rootVirtualDOM)
+// root.render(rootVirtualDOM2)
+root.render(<App />)
 
 reportWebVitals()

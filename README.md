@@ -67,7 +67,7 @@ npm i -D @types/chance @types/luxon
 
 ### JS만 사용하는 프런트엔드 개발(물리 DOM)
 
-자바스크립트로만 DOM을 다룰 때는 요소를 직접 생성하고 제어하는 작업을 수행합니다. 이를 **물리 DOM** 이라고 합니다.
+자바스크립트로만 DOM을 다룰 때는 요소를 직접 생성하고 제어하는 작업을 수행합니다. 이를 **물리 DOM** 이라고 한다.
 
 ```javascript
 // 물리 DOM에 직접 렌더링
@@ -76,7 +76,7 @@ pPhysicalDOM.textContent = "Hello world!";
 document.body.appendChild(pPhysicalDOM);
 ```
 
-이 방식은 성능에 직접적인 영향을 주며 코드가 복잡해지기 쉽습니다.
+이 방식은 성능에 직접적인 영향을 주며 코드가 복잡해지기 쉽다.
 
 ---
 
@@ -329,6 +329,43 @@ export default class App extends Component {
 ```
 
 이러한 방식은 리액트 프레임워크가 제공하는 '속성(props)'을 사용하여, 사용자 컴포넌트의 유연성과 재사용성을 극대화할 수 있다.
+
+---
+
+# 속성이란?
+
+객체 지향 프로그래밍에서 `속성(property)`은 클래스의 멤버 변수를 의미합니다. 컴포넌트 또한 화면 UI를 담당하는 클래스이므로 속성을 가질 수 있습니다. 그리고 클래스 속성은 그 값이 수시로 바뀔 수 있습니다. 이 처럼 수시로 값이 바뀔 수 있는 것은 `가변(mutable)`하다라고 한다. 반대로 값이 한번 설정되면 다시는 바뀌지 않는 것을 `불변(immutable)`하다 라고 한다. 그런데 리액트 프레임워크에서 속성은 객체지향 언어의 속성과는 다른 부분이 있어서 주의해야 한다.
+
+---
+
+# 함수 컴포넌트 만들기
+
+다음은 앞서 구현한 클래스 방식의 App 컴포넌트 코드를 단순화한 것이다. 그런데 이 코드는 **render** 메서드만 의미가 있고 나머지느 코드는 **render** 메서드를 구현할 수 있게 하는 프로그래밍 언어의 문법을 갖추는 코드일 뿐이다.
+
+```tsx
+// 클래스형 컴포넌트
+export default class App extends Component {
+  render() {
+    return <h1>class Component</h1>;
+  }
+}
+
+// 함수형 컴포넌트
+export default function App() {
+  return <h1>class Component</h1>;
+}
+
+//화살표 방식 함수 컴포넌트
+const App = () => {
+  return <h1>function Component</h1>;
+};
+```
+
+### 함수 컴포넌트의 타입
+
+다음 `React.createElement` 선언문의 첫 번째 매개변수인 `type`의 타입은 `FunctionComponent<P>`, `ComponentClass<P>`, `string` 중 하나일 수 있습니다. 여기서 함수 컴포넌트의 타입은 `FunctionComponent<P>`이고 클래스 컴포넌트의 타입은 `ComponentClass<P>`입니다. 그런데 `FunctionComponent`라는 이름이 너무 길어서 리액트는 이를 짧게 줄인 `FC`라는 이름의 타입을 제공합니다. 결국 함수 컴포넌트의 타입은 `FC<P>`입니다.
+
+---
 
 </details>
 
