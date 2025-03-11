@@ -47,29 +47,49 @@ npm i -D @types/chance @types/luxon
 
 ### HTMLElement 인터페이스
 
-위 코드에서 `newDiv` 변수의 타입은 무엇일까요? `HTMLElement`는 모든 종류의 HTML 요소가 구현하는 인터페이스입니다. 일부 요소는 이 인터페이스를 직접 구현하지만, 대부분의 요소는 `HTMLElement`를 상속한 자신들의 인터페이스를 구현합니다. 인터페이스 이름은 `HTML요소명Element` 형태의 규칙을 따릅니다. 따라서 `newDiv` 객체의 타입은 `HTMLDivElement`입니다.
+위 코드에서 `newDiv` 변수의 타입은 무엇일까 `HTMLElement`는 모든 종류의 HTML 요소가 구현하는 인터페이스입니다. 일부 요소는 이 인터페이스를 직접 구현하지만, 대부분의 요소는 `HTMLElement`를 상속한 자신들의 인터페이스를 구현합니다. 인터페이스 이름은 `HTML요소명Element` 형태의 규칙을 따릅니다. 따라서 `newDiv` 객체의 타입은 `HTMLDivElement`입니다.
+
+---
+
+## 컴포넌트란?
+
+**컴포넌트(component)** 는 객체지향 언어의 원조인 **스몰토크(Smalltalk)** 에서 유래한 매우 오래된 용어입니다. 스몰토크에서 컴포넌트는 화면 UI를 처리하는 클래스를 의미합니다. 스몰토크 설계 이론에 따르면 컴포넌트는 **모델-뷰-컨트롤러(model-view-controller, MVC)** 설계 지침에 따라 구현된 클래스여야 합니다.
+
+- **모델(Model)**: 앱의 데이터 부분을 의미합니다.
+- **뷰(View)**: 모델을 화면에 렌더링하는 부분입니다.
+- **컨트롤러(Controller)**: 사용자의 키보드와 마우스 입력을 수신받아 모델과 뷰에 적절한 형태로 반영하는 역할을 합니다.
+
+스몰토크 컴포넌트 개념은 매우 일반적이어서 사실 거의 모든 프로그래밍 언어와 프레임워크는 이 개념을 그대로 빌려서 사용하고 있습니다. 리액트에서 컴포넌트 또한 스몰토크의 컴포넌트와 개념적으로 같습니다.
+
+다만 리액트는 16.8 버전 이후 **리액트 훅(react hooks)** 이라는 새로운 메커니즘을 고안해 내면서 객체지향 언어에서 의미하는 클래스가 아니라 단순한 함수 형태로도 컴포넌트를 구현할 수 있게 되었습니다. 또한 리액트 팀은 가능한 한 함수 컴포넌트와 리액트 훅을 사용하라고 권장합니다.
 
 ---
 
 ### JS만 사용하는 프런트엔드 개발(물리 DOM)
 
+자바스크립트로만 DOM을 다룰 때는 요소를 직접 생성하고 제어하는 작업을 수행합니다. 이를 **물리 DOM** 이라고 합니다.
+
 ```javascript
-//물리 DOM에 직접 렌더링
+// 물리 DOM에 직접 렌더링
 let pPhysicalDOM = document.createElement("p");
-pPhysicalDOM.innerText = "Hello physical DOM world!";
+pPhysicalDOM.textContent = "Hello world!";
 document.body.appendChild(pPhysicalDOM);
 ```
 
+이 방식은 성능에 직접적인 영향을 주며 코드가 복잡해지기 쉽습니다.
+
 ---
 
-### 리액트를 사용하는 프런트엔드 개발(가상 DOM)
+### React를 사용하는 프런트엔드 개발 (가상 DOM)
 
-```javascript
-//가상 DOM에 렌더링
-let pVirtualDOM = React.createElement('p', null, 'Hello, React!')
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-root.render(pVirtualDOM)
+```jsx
+// 리액트의 가상 DOM을 활용하여 렌더링
+const virtualDOM = <p>Hello, React!</p>;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(pVirtualDOM);
 ```
+
+리액트는 가상 DOM(Virtual DOM)을 활용하여 성능을 최적화합니다. JSX 형태로 작성된 코드는 React.createElement를 통해 가상 DOM 객체로 변환되며, 리액트가 이를 물리 DOM에 효율적으로 반영해 준다.
 
 ---
 
