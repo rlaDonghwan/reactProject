@@ -558,7 +558,7 @@ window.addEventListener("resize", (event) => {
 
 ### 이벤트 리스너 (Event Listener)
 
-#### 기본 이벤트 리스너 예제
+### 기본 이벤트 리스너 예제
 
 ```javascript
 window.addEventListener("click", (e: Event) =>
@@ -570,7 +570,7 @@ window.addEventListener("click", (e: Event) =>
 
 ---
 
-#### `getElementById`를 이용한 이벤트 리스너 등록
+### `getElementById`를 이용한 이벤트 리스너 등록
 
 리액트 프로젝트에서는 `public` 디렉터리의 `index.html` 파일에 `<div id="root">` 태그를 포함하고 있으므로, 아래처럼 이벤트 리스너를 등록할 수 있다.
 
@@ -581,7 +581,7 @@ document.getElementById("root")?.addEventListener("click", (e: Event) => {
 });
 ```
 
-#### 옵션 체이닝(Optional Chaining)
+### 옵션 체이닝(Optional Chaining)
 
 위 코드에서 `?.` 연산자는 **옵셔널 체이닝(Optional Chaining)** 연산자로, `getElementById('root')`가 `null`을 반환할 경우 `addEventListener`를 호출하지 않도록 방지한다.
 
@@ -610,6 +610,324 @@ export default function EventListener() {
 ```
 
 이 코드에서는 `<div id="root">` 요소에 두 개의 `click` 이벤트 리스너를 부착하여 클릭 이벤트가 발생할 때마다 두 개의 콘솔 로그가 실행된다.
+
+---
+
+### 물리 DOM 객체의 이벤트 속성
+
+앞에서 살펴본 `addEventListener` 메서드는 사용법이 조금 번거롭다. 이 때문에 `window`를 포함한 대부분의 HTML 요소는 `onclick`처럼 `on`뒤에 이벤트 이름을 붙인 속성을 제공한다. 이벤트 속성은 `addEventListener`의 사용법을 간결하게 하는 게 목적이므로 이벤트 속성값에는 항상 이벤트 처리기를 설정해야 한다.
+
+아래 코드는 onclick 이벤트 속성으로 다시 구현한 예
+
+```javascript
+window.onclick = (e: Event) => console.log("mouse click occurs");
+```
+
+<div id = "root">에서 DOM 객체의 onclick 속성값을 구현할 수 있다.
+옵셔널 체이닝 연산자는 `document.getElementById('root')?.onclick = 콜백_함수` 처럼 값을 설정하는 구문에는 사용할 수 없으므로 다음과 같은 형태로 구현해야 한다
+
+```javascript
+const rootDiv = document.getElementById("root");
+if (rootDiv) {
+  rootDiv.onclick = (e: Event) => console.log("mouse click occurs.");
+}
+```
+
+---
+
+### 리액트 프레임워크의 이벤트 속성
+
+- 리액트 컴포넌트도 **on이벤트명**형태로 된 HTML 요소의 이벤트 속성들을 제공합니다. 그런데 한 가지 큰 차이는 HTML 요소의 이벤트 속성은 모두 소문자지만, 리액트 코어 컴포넌트의 속성은 `onClick, onMouseEnter`처럼 소문자로 시작하는 카멜 표기법을 사용합니다.
+- 그리고 리액트 컴포넌트의 이벤트 속성에 설정하는 콜백함수는 매개변수 e의 타입이 `Event`가 아니라 리액트가 제공하는 `SyntheicEvent` 타입을 설정해야 한다는 차이가 있다.
+
+### SyntheticEvent in React
+
+### `SyntheticEvent` 선언문
+
+```tsx
+interface SyntheticEvent<T = Element, E = Event>
+  extends BaseSyntheticEvent<E, EventTarget & T, EventTarget> {}
+```
+
+리액트 컴포넌트 관점에서 **synthetic** 이라는 용어는 _모든 종류의 이벤트를 종합한_ 개념으로 이해할 수 있다.
+
+리액트의 `SyntheticEvent`는 `BaseSyntheticEvent`를 상속하는 타입으로, `BaseSyntheticEvent`의 주요 내용은 다음과 같다.
+
+### `BaseSyntheticEvent` 인터페이스
+
+```tsx
+interface BaseSyntheticEvent<E = object, C = any, T = any> {
+  nativeEvent: E;
+  currentTarget: C;
+  target: T;
+  preventDefault(): void;
+  stopPropagation(): void;
+}
+```
+
+### 설명
+
+- **`nativeEvent`**: 원래의 브라우저 이벤트 객체
+- **`currentTarget`**: 현재 이벤트가 실행된 요소 (이벤트 핸들러가 바인딩된 요소)
+- **`target`**: 실제 이벤트가 발생한 요소
+- **`preventDefault()`**: 기본 이벤트 동작을 막음
+- **`stopPropagation()`**: 이벤트 전파를 중단함
+
+### `SyntheticEvent`의 역할
+
+리액트는 브라우저의 기본 이벤트 객체를 직접 사용하지 않고 `SyntheticEvent`로 감싸서 일관된 이벤트 처리를 제공합니다. `SyntheticEvent`는 여러 브라우저에서 동일한 API를 유지하도록 추상화되어 있으며, 이벤트 객체의 성능 최적화를 위해 **이벤트 풀링(Event Pooling)** 기법을 사용한다.
+
+---
+
+## EventTarget의 `dispatchEvent` 메서드
+
+### `dispatchEvent` 메서드 정의
+
+DOM의 최상위 타입인 `EventTarget`은 다음과 같은 `dispatchEvent` 메서드를 제공한다.
+
+```typescript
+dispatchEvent(event: Event): boolean;
+```
+
+이 메서드를 이용하면 특정 `Event` 객체를 생성하여 원하는 요소에서 직접 이벤트를 발생시킬 수 있다..
+
+---
+
+### 이벤트 객체 생성 및 `dispatchEvent` 활용
+
+아래와 같이 `Event` 객체를 생성할 수 있다.
+
+```typescript
+new Event("click", { bubbles: true });
+```
+
+이렇게 생성된 `Event` 객체를 특정 DOM 요소의 `dispatchEvent` 메서드를 호출하여 이벤트를 발생시킬 수 있다.
+
+```typescript
+document
+  .getElementById("root")
+  ?.dispatchEvent(new Event("click", { bubbles: true }));
+```
+
+> 위 코드는 `#root` 요소에서 `click` 이벤트를 발생시키며, `bubbles: true` 옵션을 통해 이벤트 버블링이 허용된다.
+
+---
+
+### `click` 메서드와 `dispatchEvent`의 관계
+
+모든 DOM 객체의 부모 타입인 `HTMLElement`는 `click()` 메서드를 제공하며, 이는 `dispatchEvent(new Event('click'))`과 동일하게 동작한다.
+
+```typescript
+document.getElementById("root")?.click();
+```
+
+즉, `click()` 메서드는 내부적으로 `dispatchEvent(new Event('click'))`을 호출하는 방식으로 구현되어 있다.
+
+---
+
+### `src/pages/DispatchEvent.tsx` 구현
+
+아래 코드는 `dispatchEvent`와 `click` 메서드를 직접 호출하는 예제
+
+```tsx
+// src/pages/DispatchEvent.tsx
+
+export default function DispatchEvent() {
+  const onCallDispatchEvent = () => {
+    console.log("onCallDispatchEvent");
+    document
+      .getElementById("root")
+      ?.dispatchEvent(new Event("click", { bubbles: true }));
+  };
+
+  const onCallClick = () => {
+    console.log("onCallClick");
+    document.getElementById("root")?.click();
+  };
+
+  return (
+    <div>
+      <p>DispatchEvent</p>
+      <button onClick={onCallDispatchEvent}>call dispatchEvent</button>
+      <button onClick={onCallClick}>call click</button>
+    </div>
+  );
+}
+```
+
+### 실행 결과
+
+1. **첫 번째 버튼 (`call dispatchEvent`)** 클릭 시:
+
+   - `dispatchEvent`를 이용하여 `click` 이벤트를 발생
+   - 콘솔에 `'onCallDispatchEvent'`이 출력
+   - 이벤트 버블링이 활성화된 상태로 `click` 이벤트가 실행
+
+2. **두 번째 버튼 (`call click`)** 클릭 시:
+   - `click()` 메서드를 호출하여 직접 `click` 이벤트를 실행
+   - 콘솔에 `'onCallClick'`이 출력
+   - 내부적으로 `dispatchEvent(new Event('click'))`과 동일한 동작을 수행
+
+---
+
+### 이벤트 버블링 (Event Bubbling)
+
+**이벤트 버블링**이란, 자식 요소에서 발생한 이벤트가 가까운 부모 요소에서 점점 상위 요소까지 전달되는 현상을 의미합니다.
+
+### 이벤트 버블링 흐름
+
+```html
+window ├─
+<body>
+  ├─
+  <div>├─ <button>(이벤트 발생)</button></div>
+</body>
+```
+
+이벤트는 **가장 깊은 요소**에서 발생한 후, **상위 요소(부모 요소)를 거쳐 최상위(window)까지 전달**됩니다.
+
+---
+
+### 이벤트 버블링 예제
+
+아래 코드에서 `<button>`을 클릭하면, **버튼뿐만 아니라 부모 요소인 `<div>`에서도 `click` 이벤트 처리기가 실행**됩니다.
+
+```tsx
+export default function BubblingExample() {
+  const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("Button clicked", e.currentTarget);
+  };
+
+  const onDivClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log("Div clicked", e.currentTarget);
+  };
+
+  return (
+    <div
+      onClick={onDivClick}
+      style={{ padding: "20px", backgroundColor: "#f0f0f0" }}
+    >
+      <button onClick={onButtonClick}>Click me</button>
+    </div>
+  );
+}
+```
+
+### 이벤트 흐름
+
+- `<button>`을 클릭하면 `onButtonClick`이 실행됩니다.
+- 이벤트 버블링으로 인해 **부모 요소인 `<div>`의 `onDivClick`도 실행**됩니다.
+
+#### `currentTarget` 값 차이
+
+- `onButtonClick`에서 `e.currentTarget`은 `<button>` 요소입니다.
+- `onDivClick`에서 `e.currentTarget`은 `<div>` 요소입니다.
+
+이벤트 버블링이 필요 없을 경우, `stopPropagation()`을 호출하여 버블링을 막을 수 있습니다.
+
+```tsx
+const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.stopPropagation(); // 이벤트 버블링 중단
+  console.log("Button clicked");
+};
+```
+
+---
+
+### `<input>` 요소의 이벤트 처리
+
+### 개요
+
+`<input>` 요소는 `<button>`과 함께 이벤트 처리를 자주 구현해야 하는 대표적인 요소입니다. 하지만 `<input>` 요소는 `type` 속성값에 따라 동작 방식과 사용자 입력을 처리하는 방법이 다를 수 있습니다.
+
+---
+
+### `input` 요소의 주요 이벤트
+
+`<input>` 요소에서 주로 사용되는 이벤트들은 다음과 같습니다:
+
+- **`onChange`**: 입력값이 변경될 때 호출됨.
+- **`onInput`**: 사용자가 입력할 때마다 호출됨 (`onChange`와 차이점 있음).
+- **`onFocus`**: 입력 필드가 포커스를 받을 때 호출됨.
+- **`onBlur`**: 입력 필드에서 포커스가 벗어날 때 호출됨.
+- **`onKeyDown` / `onKeyUp`**: 키를 누르거나 뗄 때 호출됨.
+
+---
+
+### `onChange` vs `onInput`
+
+두 이벤트는 비슷해 보이지만 동작 방식이 다릅니다.
+
+- **`onChange`**: 입력이 완료되고 `focus`가 해제되었을 때 발생.
+- **`onInput`**: 사용자가 입력할 때마다 즉시 발생.
+
+```tsx
+<input type="text" onChange={(e) => console.log("Changed:", e.target.value)} />
+<input type="text" onInput={(e) => console.log("Input event:", e.target.value)} />
+```
+
+---
+
+### 다양한 `type` 속성에 따른 이벤트 처리
+
+각 `type`에 따라 입력 방식이 다르므로, 이벤트 처리 방법도 달라질 수 있습니다.
+
+```tsx
+export default function VariousInputs() {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(`Type: ${e.target.type}, Value: ${e.target.value}`);
+  };
+
+  return (
+    <div>
+      <p>다양한 input 요소</p>
+      <input type="text" placeholder="텍스트 입력" onChange={handleChange} />
+      <input
+        type="password"
+        placeholder="비밀번호 입력"
+        onChange={handleChange}
+      />
+      <input type="number" placeholder="숫자 입력" onChange={handleChange} />
+      <input
+        type="checkbox"
+        onChange={(e) => console.log("Checked:", e.target.checked)}
+      />
+      <input
+        type="radio"
+        name="group"
+        onChange={(e) => console.log("Radio selected:", e.target.value)}
+      />
+      <input
+        type="file"
+        onChange={(e) => console.log("파일 선택:", e.target.files)}
+      />
+    </div>
+  );
+}
+```
+
+---
+
+### 추가적으로 알아야 할 사항
+
+1. **제어 컴포넌트 vs 비제어 컴포넌트**
+
+   - `useState`와 함께 상태를 관리하는 `<input>`은 **제어 컴포넌트**.
+   - `ref`를 사용하여 직접 값을 참조하는 `<input>`은 **비제어 컴포넌트**.
+
+2. **이벤트 취소 (Preventing Default Behavior)**
+
+   ```tsx
+   <input type="checkbox" onClick={(e) => e.preventDefault()} />
+   ```
+
+   위 코드는 체크박스를 클릭해도 선택되지 않도록 설정합니다.
+
+3. **키보드 이벤트와 함께 사용 가능**
+   - `onKeyDown`, `onKeyUp`을 사용하여 입력 이벤트와 조합 가능.
+   ```tsx
+   <input type="text" onKeyDown={(e) => console.log(`Key pressed: ${e.key}`)} />
+   ```
 
 </details>
 
@@ -642,3 +960,4 @@ export default function EventListener() {
 <details>
 <summary><strong>6. DB와 API 서버 </strong></summary>
 </details>
+```
