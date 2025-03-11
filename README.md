@@ -9,7 +9,7 @@ npm i -D @types/chance @types/luxon
 <details>
 <summary><strong>1. 리액트 동작 원리 </strong></summary>
 
-## 가상 DOM 이해하기
+# 가상 DOM 이해하기
 
 ### react와 react-dom 패키지
 
@@ -73,7 +73,7 @@ root.render(pVirtualDOM)
 
 ---
 
-## JSX 구문 이해하기
+# JSX 구문 이해하기
 
 ### React.createElement 호출의 복잡성 문제
 
@@ -102,7 +102,7 @@ root.render(rootVirtualDOM);
 
 ---
 
-### 컴포넌트 이해하기
+# 컴포넌트 이해하기
 
 - 컴포넌트는 가상 DOM, JSX와 함께 리액트의 핵심 기능이다. 리액트에서 컴포넌트는 두 종류로 **클래스 컴포넌트**와 **함수 컴포넌트**가 있다.
 
