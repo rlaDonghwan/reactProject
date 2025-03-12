@@ -1041,6 +1041,33 @@ export default function DragDropHandler() {
 
 <details>
 <summary><strong>3. 함수 컴포넌트와 리액트 훅 </strong></summary>
+
+## 리액트 훅이란?
+
+리액트 훅은 `useState`, `useEffect` 등 `use`라는 접두사가 포함된 함수들의 집합이다.
+리액트 훅 함수는 반드시 **함수형 컴포넌트**에서만 사용해야 한다.
+
+---
+
+## 리액트 훅 종류
+
+| 용도                        | 훅                | 설명   |
+| --------------------------- | ----------------- | ------ |
+| **컴포넌트 데이터 관리**    | `useMemo`         | 04-2절 |
+|                             | `useCallback`     |        |
+|                             | `useState`        | 04-3절 |
+|                             | `useReducer`      | 07-2절 |
+| **컴포넌트 생명 주기 대응** | `useEffect`       | 04-4절 |
+|                             | `useLayoutEffect` |        |
+
+---
+
+## 참고
+
+- `useState`, `useReducer` → 상태(state) 관리를 위한 훅
+- `useEffect`, `useLayoutEffect` → 컴포넌트 생명주기 대응
+- `useMemo`, `useCallback` → 성능 최적화용 훅
+
 </details>
 
 ---
