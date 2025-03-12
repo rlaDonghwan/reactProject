@@ -1031,10 +1031,6 @@ export default function DragDropHandler() {
 <details>
 <summary><strong>2. 리액트 컴포넌트 CSS 스타일링 </strong></summary>
 
-# 컴포넌트 스타일링
-
-- 리액트 컴포넌트는 어떤 시점에서는 HTML 요소로 바뀌므로 컴포넌트의 스타일링 또한 CSS를 사용해야 한다. 리액트 프로젝트도 큰 시각에서 보면 index.html 파일에 HTML 코드를 작성하고 <script> 태그 안에 자바 스크립트 코드를 작성하는 일반적인 웹 프런트엔드 개발과 크게 다르지 않다. 이때 CSS는 .css 파일에 담겨 `<link>` 태그의 href 속성에 설정하는 형태로 동작한다.
-
 </details>
 
 ---
@@ -1049,16 +1045,63 @@ export default function DragDropHandler() {
 
 ---
 
-## 리액트 훅 종류
+## 리액트 훅 종류 및 설명
 
-| 용도                        | 훅                | 설명   |
-| --------------------------- | ----------------- | ------ |
-| **컴포넌트 데이터 관리**    | `useMemo`         | 04-2절 |
-|                             | `useCallback`     |        |
-|                             | `useState`        | 04-3절 |
-|                             | `useReducer`      | 07-2절 |
-| **컴포넌트 생명 주기 대응** | `useEffect`       | 04-4절 |
-|                             | `useLayoutEffect` |        |
+| 용도                        | 훅                    | 설명                                                                                                                               |
+| --------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **컴포넌트 데이터 관리**    | `useState`            | 상태를 관리하는 가장 기본적인 훅. 배열을 반환하며 첫 번째 요소는 상태 값, 두 번째 요소는 상태를 변경하는 함수.                     |
+|                             | `useReducer`          | `useState`보다 복잡한 상태 관리를 할 때 사용하는 훅. 리듀서 패턴을 활용하여 상태를 변경함.                                         |
+|                             | `useMemo`             | 연산량이 많은 작업의 결과를 저장하여 성능을 최적화하는 훅.                                                                         |
+|                             | `useCallback`         | 함수의 메모이제이션을 통해 불필요한 렌더링을 방지하는 훅.                                                                          |
+| **컴포넌트 생명 주기 대응** | `useEffect`           | 클래스 컴포넌트의 `componentDidMount`, `componentDidUpdate`, `componentWillUnmount`를 대체하는 훅. 사이드 이펙트를 처리할 때 사용. |
+|                             | `useLayoutEffect`     | `useEffect`와 비슷하지만, 브라우저가 화면을 그리기 전에 실행됨. 레이아웃 측정을 위해 사용.                                         |
+| **기타 훅**                 | `useRef`              | 컴포넌트의 DOM 요소에 접근하거나 상태를 저장할 때 사용. 렌더링과 무관한 데이터를 저장하는 데 유용.                                 |
+|                             | `useContext`          | 컴포넌트 트리에서 전역적으로 상태를 공유하는 훅. `Context API`와 함께 사용됨.                                                      |
+|                             | `useImperativeHandle` | 부모 컴포넌트가 자식 컴포넌트의 특정 메서드를 직접 호출할 수 있도록 설정하는 훅. `forwardRef`와 함께 사용됨.                       |
+|                             | `useDebugValue`       | 커스텀 훅에서 디버깅 정보를 출력하는 데 사용.                                                                                      |
+
+---
+
+## `setInterval` API와 관련된 내용
+
+`setInterval` API는 특정 시간 간격마다 지정된 함수를 실행하는 브라우저 내장 함수이다.
+
+### `setInterval` 사용 예제
+
+```tsx
+import Clock from "./pages/Clock";
+import { useEffect, useState } from "react";
+
+export default function App() {
+  const [today, setToday] = useState(new Date());
+
+  useEffect(() => {
+    const duration = 1000;
+    const id = setInterval(() => {
+      setToday(new Date());
+    }, duration);
+    return () => clearInterval(id);
+  }, []);
+
+  return <Clock today={today} />;
+}
+```
+
+### `setInterval`과 `useEffect`
+
+- `setInterval`은 **컴포넌트가 마운트된 후 실행**되어야 하므로 `useEffect` 내부에서 호출함.
+- 메모리 누수를 방지하기 위해 **클린업 함수에서 `clearInterval(intervalId)` 호출**하여 인터벌을 해제함.
+
+### `setInterval` 관련 주의사항
+
+1. **상태가 클로저에 갇히는 문제**:
+
+   - `setInterval` 내부 함수는 렌더링 시점의 `state`를 기억하기 때문에, 최신 상태 값을 참조하지 못할 수 있음.
+   - 해결책: `useRef`를 사용하여 값을 최신 상태로 유지하거나, `setState`에 함수형 업데이트를 사용.
+
+2. **`setTimeout`과의 차이점**:
+   - `setInterval`은 일정 간격마다 반복 실행.
+   - `setTimeout`은 일정 시간이 지난 후 한 번만 실행.
 
 ---
 
@@ -1067,6 +1110,9 @@ export default function DragDropHandler() {
 - `useState`, `useReducer` → 상태(state) 관리를 위한 훅
 - `useEffect`, `useLayoutEffect` → 컴포넌트 생명주기 대응
 - `useMemo`, `useCallback` → 성능 최적화용 훅
+- `setInterval`은 주기적으로 실행해야 하는 작업을 처리할 때 `useEffect`와 함께 활용됨.
+
+리액트 훅을 사용하면 **클래스 컴포넌트 없이도 상태 관리 및 생명주기 메서드를 쉽게 활용할 수 있다.**
 
 </details>
 
@@ -1087,4 +1133,5 @@ export default function DragDropHandler() {
 <details>
 <summary><strong>6. DB와 API 서버 </strong></summary>
 </details>
-```
+
+---
