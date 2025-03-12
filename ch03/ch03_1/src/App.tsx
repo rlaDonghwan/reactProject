@@ -1,18 +1,13 @@
-import Bootstrap from './pages/Bootstrap'
-import Icon from './pages/Icon'
-import Style from './pages/Style'
-import UsingIcon from './pages/UsingIcon'
-import UsingIconWithCSSClass from './pages/UsingIconWithCSSClass'
-import './App.css'
+import ButtonTest from './pages/ButtonTest'
+import InputTest from './pages/InputTest'
+// import ModalTest from './pages/ModalTest'
 
 export default function App() {
   return (
-    <div>
-      <UsingIconWithCSSClass />
-      <UsingIcon />
-      <Style />
-      <Icon />
-      <Bootstrap />
-    </div>
+    <main>
+      <ButtonTest />
+      <InputTest />
+      {/* <ModalTest /> */}
+    </main>
   )
 }

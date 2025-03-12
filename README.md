@@ -6,6 +6,8 @@ npm i chance luxon
 
 npm i -D @types/chance @types/luxon
 
+npm i -D postcss autoprefixer tailwindcss @tailwindcss/line-clamp daisyui
+
 <details>
 <summary><strong>1. 리액트 동작 원리 </strong></summary>
 
@@ -1028,6 +1030,11 @@ export default function DragDropHandler() {
 
 <details>
 <summary><strong>2. 리액트 컴포넌트 CSS 스타일링 </strong></summary>
+
+# 컴포넌트 스타일링
+
+- 리액트 컴포넌트는 어떤 시점에서는 HTML 요소로 바뀌므로 컴포넌트의 스타일링 또한 CSS를 사용해야 한다. 리액트 프로젝트도 큰 시각에서 보면 index.html 파일에 HTML 코드를 작성하고 <script> 태그 안에 자바 스크립트 코드를 작성하는 일반적인 웹 프런트엔드 개발과 크게 다르지 않다. 이때 CSS는 .css 파일에 담겨 `<link>` 태그의 href 속성에 설정하는 형태로 동작한다.
+
 </details>
 
 ---
