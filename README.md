@@ -924,10 +924,101 @@ export default function VariousInputs() {
    위 코드는 체크박스를 클릭해도 선택되지 않도록 설정합니다.
 
 3. **키보드 이벤트와 함께 사용 가능**
+
    - `onKeyDown`, `onKeyUp`을 사용하여 입력 이벤트와 조합 가능.
+
    ```tsx
    <input type="text" onKeyDown={(e) => console.log(`Key pressed: ${e.key}`)} />
    ```
+
+---
+
+### 드래그 앤 드롭 이벤트 처리
+
+#### 개요
+
+모든 `HTMLElement` 요소는 `draggable` 속성을 제공하며, 이를 `true`로 설정하면 해당 요소에서 **드래그 앤 드롭(drag & drop)** 관련 이벤트가 활성화된다.
+
+```html
+<h1 draggable>Drag Me</h1>
+```
+
+위 코드는 `<h1>` 요소를 드래그할 수 있도록 설정한 예제
+
+---
+
+#### 드래그 앤 드롭 관련 이벤트
+
+드래그 앤 드롭 이벤트는 `DragEvent` 타입의 이벤트 객체를 매개변수로 사용합니다.
+
+| 종류          | 발생 시기                                       | 리액트 이벤트 속성 |
+| ------------- | ----------------------------------------------- | ------------------ |
+| **dragenter** | 드래그한 요소가 특정 드롭 대상 위로 올라갔을 때 | `onDragEnter`      |
+| **dragstart** | 사용자가 요소를 드래그하기 시작했을 때          | `onDragStart`      |
+| **drag**      | 요소가 드래그되는 동안 지속적으로 발생          | `onDrag`           |
+| **dragover**  | 드래그 대상 위로 지나갈 때 (밀리초마다 발생)    | `onDragOver`       |
+| **dragleave** | 드래그한 요소가 드롭 대상에서 벗어났을 때       | `onDragLeave`      |
+| **dragend**   | 드래그가 완료되었을 때                          | `onDragEnd`        |
+| **drop**      | 드래그한 요소가 드롭 대상 위에 놓였을 때        | `onDrop`           |
+
+---
+
+#### 드래그 앤 드롭 이벤트 예제 (React)
+
+아래 예제는 `div` 요소에서 **드래그 앤 드롭 이벤트를 처리하는 코드**이다.
+
+```tsx
+import React, { useState } from "react";
+
+export default function DragDropHandler() {
+  const [droppedText, setDroppedText] = useState("");
+
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("text/plain", "드래그된 텍스트");
+    console.log("Drag Start");
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const text = e.dataTransfer.getData("text/plain");
+    setDroppedText(text);
+    console.log("Dropped: ", text);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // 기본 동작 방지 (drop 이벤트 허용)
+  };
+
+  return (
+    <div>
+      <div
+        draggable
+        onDragStart={handleDragStart}
+        style={{ padding: "10px", background: "lightgray" }}
+      >
+        Drag Me
+      </div>
+      <div
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        style={{
+          marginTop: "20px",
+          padding: "20px",
+          border: "2px dashed black",
+        }}
+      >
+        Drop Here: {droppedText}
+      </div>
+    </div>
+  );
+}
+```
+
+#### 설명
+
+1. **`handleDragStart`**: 드래그 시작 시 `dataTransfer.setData`를 사용하여 데이터를 설정한다.
+2. **`handleDragOver`**: 기본 동작을 막아 `drop` 이벤트가 정상 작동하도록 한다.
+3. **`handleDrop`**: `dataTransfer.getData`를 사용하여 드래그된 데이터를 가져온다
 
 </details>
 
