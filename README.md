@@ -1020,12 +1020,14 @@ export default function DragDropHandler() {
 2. **`handleDragOver`**: 기본 동작을 막아 `drop` 이벤트가 정상 작동하도록 한다.
 3. **`handleDrop`**: `dataTransfer.getData`를 사용하여 드래그된 데이터를 가져온다
 
+---
+
 </details>
 
 ---
 
 <details>
-<summary><strong>2. 컴포넌트 CSS 스타일링 </strong></summary>
+<summary><strong>2. 리액트 컴포넌트 CSS 스타일링 </strong></summary>
 </details>
 
 ---
