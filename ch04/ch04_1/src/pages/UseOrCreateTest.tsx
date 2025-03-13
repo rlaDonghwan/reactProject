@@ -1,6 +1,6 @@
-import {Title, Avatar} from '../components'
+import { Title, Avatar } from '../components'
 import * as D from '../data'
-import {useOrCreate} from './useOrCreate'
+import { useOrCreate } from './useOrCreate'
 
 export default function CreateOrUseTest() {
   // prettier-ignore
@@ -12,7 +12,7 @@ export default function CreateOrUseTest() {
   )
 
   const head = useOrCreate('head', () =>
-    headTexts.map(text => <th key={text}>{text}</th>)
+    headTexts.map((text) => <th key={text}>{text}</th>)
   )
 
   const body = useOrCreate('children', () =>
@@ -32,8 +32,8 @@ export default function CreateOrUseTest() {
   return (
     <div className="mt-4">
       <Title>CreateOrUseTest</Title>
-      <div className="overflow-x-auto mt-4 p-4">
-        <table className="table table-zebra table-compact w-full">
+      <div className="p-4 mt-4 overflow-x-auto">
+        <table className="table w-full table-zebra table-compact">
           <thead>
             <tr>{head}</tr>
           </thead>

@@ -1335,6 +1335,43 @@ export default function MemoComponent({ headTexts, users }) {
 
 ---
 
+## useState 훅 이해하기
+
+### 불변 상태를 캐시하는 useState 훅
+
+- 앞에서 알아본 `useMemo` 훅은 불변 상태를 캐시하지만, `useState` 훅은 가변 상태를 캐시한다. `useState` 훅은 다음처럼 react 패키지에 임포트해서 사용한다.
+
+---
+
+### number 타입일 때 useState 훅 사용하기
+
+먼저 상태가 number 타입일 때 useState 훅을 어떻게 사용하는지 알아보겠습니다. 다음 코드는 초깃값을 0으로 설정하므로 이 코드가 실행된 시점에 count는 0으로 설정된다.
+
+```tsx
+import { useState } from "react";
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+    </div>
+  );
+}
+```
+
+위 코드에서 `useState` 훅을 사용하여 `count` 상태를 관리합니다. `increment` 함수는 `count`를 1 증가시키고, `decrement` 함수는 `count`를 1 감소시킵니다. 버튼을 클릭하면 `count` 값이 변경되어 화면에 반영된다.
+
+---
+
+
+
 </details>
 
 ---
