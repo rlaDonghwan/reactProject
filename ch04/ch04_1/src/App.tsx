@@ -1,16 +1,49 @@
-import ClassLifecycle from './pages/ClassLifecycle'
-import WindowResizeTest from './pages/WindowResizeTest'
-import FetchTest from './pages/FetchTest'
+import ResponsiveContextTest from './pages/ResponsiveContextTest'
+import { ResponsiveProvider } from './contexts'
 
 export default function App() {
   return (
-    <div>
-      <ClassLifecycle />
-      <WindowResizeTest />
-      <FetchTest />
-    </div>
+    <ResponsiveProvider>
+      <main>
+        <ResponsiveContextTest />
+      </main>
+    </ResponsiveProvider>
   )
 }
+
+// import ClickTest from './pages/ClickTest'
+// import FileDrop from './pages/FileDrop'
+// import InputFocusTest from './pages/InputFocusTest'
+// import InputValueTest from './pages/InputValueTest'
+// import ForwardRefTest from './pages/ForwardRefTest'
+// import ValidatableInputTest from './pages/ValidatableInputTest'
+
+// export default function App() {
+//   return (
+//     <div>
+//       <ValidatableInputTest />
+//       <ForwardRefTest />
+//       <InputValueTest />
+//       <InputFocusTest />
+//       <FileDrop />
+//       <ClickTest />
+//     </div>
+//   )
+// }
+
+// import ClassLifecycle from './pages/ClassLifecycle'
+// import WindowResizeTest from './pages/WindowResizeTest'
+// import FetchTest from './pages/FetchTest'
+
+// export default function App() {
+//   return (
+//     <div>
+//       <ClassLifecycle />
+//       <WindowResizeTest />
+//       <FetchTest />
+//     </div>
+//   )
+// }
 
 // import NumberState from './pages/NumberState'
 // import InputTest from './pages/InputTest'
