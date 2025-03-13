@@ -1278,6 +1278,63 @@ export default function CachedComponent({ value }) {
 - `useMemo`를 사용하면 `value` 값이 변경되지 않는 한, 계산된 값을 재사용함.
 - 불필요한 연산을 줄여 **성능 최적화**가 가능함.
 
+---
+
+### useMemo 훅
+
+#### 개요
+
+`react` 패키지는 데이터를 캐싱하는 용도로 `useMemo` 훅을 제공합니다.
+
+Memo는 **메모이제이션(Memoization)**의 줄임말로, 이전 계산 결과를 저장하여 성능을 최적화하는 기법입니다.
+
+`useMemo`는 연산량이 많은 계산을 수행할 때 유용합니다.
+
+#### useMemo 사용법
+
+```javascript
+const cachedData = useMemo(() => {
+  return 원본_데이터;
+}, [의존성1, 의존성2]);
+```
+
+`useMemo`는 첫 번째 매개변수로 콜백 함수를 받고, 두 번째 매개변수로 **의존성 배열(Dependency List)**을 받습니다. 의존성이 변경될 때만 캐시된 값을 재계산합니다.
+
+#### useMemo 선언문
+
+```typescript
+function useMemo<T>(factory: () => T, deps: DependencyList | undefined): T;
+```
+
+#### 실습 예제
+
+```javascript
+import { useMemo } from "react";
+
+export default function MemoComponent({ headTexts, users }) {
+  const head = useMemo(() => headTexts, [headTexts]);
+  const body = useMemo(() => users, [users]);
+
+  return (
+    <div>
+      <h1>{head}</h1>
+      <ul>
+        {body.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+- `head` 값은 `headTexts`가 변경될 때만 업데이트된다.
+- `body` 값은 `users`가 변경될 때만 재계산된다.
+
+이를 통해 불필요한 렌더링을 방지하고 성능을 최적화할 수 있다.
+
+---
+
 </details>
 
 ---
