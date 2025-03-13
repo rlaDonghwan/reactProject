@@ -1175,7 +1175,108 @@ export default function App() {
 
 ---
 
-### userMemo와 useCallback 훅 이해하기
+## userMemo와 useCallback 훅 이해하기
+
+### 리액트 훅의 기본 원리
+
+리액트 훅을 이해하려면 먼저 **변수의 유효 범위(Scope)** 에 대해 알아야 한다.
+모든 프로그래밍 언어에서 변수는 특정 **유효 범위**를 가지며, 특정 범위 내에서만 사용할 수 있다.
+
+예를 들어, 아래 코드에서 `local` 변수는 블록 `{}` 내부에서만 유효하며, 블록을 벗어나면 자동으로 소멸한다.
+
+### 변수와 블록 범위
+
+```js
+{
+  const local = 1;
+}
+```
+
+### 함수 내부에서의 변수 유효 범위
+
+변수의 블록 범위 개념은 함수 내부에서도 동일하게 적용된다.
+
+```js
+function func() {
+  const local = 1;
+  return local;
+}
+```
+
+- 함수 내부에서 선언된 변수 `local`은 함수 실행 시 생성되고, 함수가 종료되면 자동으로 소멸된다.
+- `return local;`을 통해 함수 실행 시 `local` 값을 반환할 수 있지만, 함수 실행이 끝나면 변수는 사라진다.
+
+---
+
+## 리액트 함수 컴포넌트와 변수 유효 범위
+
+리액트의 함수 컴포넌트는 **JavaScript 함수**이므로 동일한 유효 범위 규칙이 적용된다.
+
+```tsx
+export default function UseOrCreate() {
+  const local = 1;
+  return <p>{local}</p>;
+}
+```
+
+### 특징
+
+- 함수 컴포넌트 내부에서 선언된 변수는 **컴포넌트가 실행될 때마다 새롭게 생성됨**.
+- `return` 문 이후에는 컴포넌트의 실행이 끝나므로, `local` 변수는 유지되지 않음.
+
+> ⚠ **주의**: 함수가 다시 호출될 때마다 `local` 변수는 새로운 값으로 초기화됩니다. 따라서 **상태를 유지하려면 `useState`와 같은 리액트 훅을 사용해야 한다.**
+
+---
+
+## 상태(State)와 캐시(Cache)
+
+### 상태(State)란?
+
+프로그래밍에서 **상태(State)** 는 **변수의 유효 범위와 무관하게 계속 유지되는 값**을 의미한다.
+
+- 한 번 설정된 후 변경할 수 없는 **불변 상태(Immutable State)**
+- 언제든지 변경할 수 있으며 계속 유지되는 **가변 상태(Mutable State)**
+
+리액트의 함수 컴포넌트는 기본적으로 상태를 가질 수 없습니다. 하지만 리액트 훅(`useState`, `useReducer` 등)을 이용하면 상태를 유지할 수 있다.
+
+### 전역 변수(Global Variable)와 상태 유지
+
+함수 컴포넌트 내부에서 상태를 유지하려면 **함수 바깥에 변수를 선언**해야 한다.
+
+```tsx
+const global = 1;
+export default function UseOrCreate() {
+  return <p>{global}</p>;
+}
+```
+
+- `global` 변수는 함수 바깥에서 선언되었기 때문에 컴포넌트가 다시 렌더링되어도 유지됨.
+- 하지만 이 방식은 리액트의 **반응형 상태 관리에 적합하지 않음** (상태 변경이 UI에 반영되지 않음).
+
+### 캐시(Cache)란?
+
+캐시는 **데이터 값을 미리 복사해 놓는 임시 저장소**를 의미한다.
+
+- 원본 데이터에 접근하는 시간이 오래 걸리거나,
+- 다시 계산하는 시간이 부담되는 경우 사용된다.
+
+리액트에서는 `useMemo`와 같은 훅을 활용하여 연산 결과를 **캐싱**할 수 있다.
+
+```tsx
+import { useMemo } from "react";
+
+export default function CachedComponent({ value }) {
+  const computedValue = useMemo(() => {
+    console.log("Expensive calculation");
+    return value * 2;
+  }, [value]);
+
+  return <p>{computedValue}</p>;
+}
+```
+
+- `useMemo`를 사용하면 `value` 값이 변경되지 않는 한, 계산된 값을 재사용함.
+- 불필요한 연산을 줄여 **성능 최적화**가 가능함.
 
 </details>
 
