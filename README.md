@@ -1079,6 +1079,7 @@ export default function App() {
     const duration = 1000;
     const id = setInterval(() => {
       setToday(new Date());
+      $$;
     }, duration);
     return () => clearInterval(id);
   }, []);
@@ -1113,6 +1114,68 @@ export default function App() {
 - `setInterval`은 주기적으로 실행해야 하는 작업을 처리할 때 `useEffect`와 함께 활용됨.
 
 리액트 훅을 사용하면 **클래스 컴포넌트 없이도 상태 관리 및 생명주기 메서드를 쉽게 활용할 수 있다.**
+
+---
+
+### 커스텀 훅이란?
+
+리액트 훅은 여러 훅 함수를 조합해 마치 새로운 훅 함수가 있는 것 처럼 만들 수 있는데, 이렇게 조합한 새로운 훅 함수를 `커스텀 훅`이라고 한다. 기존에 제작한 커스텀 훅 함수를 사용해서 만들 수도 있다. 함수 이름에 `use`라는 접두어를 붙여서 만든다.
+
+```tsx
+import { useState } from "react";
+import { useInterval } from "./useInterval";
+
+// 현재 시간을 반환하는 커스텀 훅
+export const useClock = () => {
+  const [time, setTime] = useState(new Date());
+
+  // 1초마다 현재 시간을 업데이트
+  useInterval(() => setTime(new Date()));
+  return time;
+};
+
+//--------------------------------------------
+import { useEffect } from "react";
+
+// 주어진 콜백 함수를 주기적으로 실행하는 커스텀 훅
+export const useInterval = (callback: () => void, duration: number = 1000) => {
+  useEffect(() => {
+    const id = setInterval(callback, duration);
+    // 컴포넌트가 언마운트될 때 인터벌을 정리
+    return () => clearInterval(id);
+  }, [callback, duration]);
+};
+// ----------------------------------------------------
+import Clock from "./pages/Clock";
+import { useClock } from "./hooks";
+import { useEffect, useState } from "react";
+
+// useClock 훅을 사용하여 현재 시간을 Clock 컴포넌트에 전달하는 함수형 컴포넌트
+export default function App() {
+  const today = useClock();
+  return <Clock today={today} />;
+}
+
+// 주석 처리된 이전 버전의 App 컴포넌트
+export default function App() {
+  const [today, setToday] = useState(new Date());
+
+  useEffect(() => {
+    const duration = 1000;
+    const id = setInterval(() => {
+      setToday(new Date());
+    }, duration);
+    // 컴포넌트가 언마운트될 때 인터벌을 정리
+    return () => clearInterval(id);
+  }, []);
+
+  return <Clock today={today} />;
+}
+```
+
+---
+
+### userMemo와 useCallback 훅 이해하기
 
 </details>
 
