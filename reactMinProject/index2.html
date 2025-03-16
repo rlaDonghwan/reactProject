@@ -8,10 +8,30 @@
 
   <script>
     const root = document.getElementById("root");
-    const span = React.createElement("span", null, "Hello I'am a span");
+    // h3 요소를 생성하고 마우스가 들어올 때 콘솔에 메시지를 출력하는 이벤트를 추가합니다.
+    const h3 = React.createElement(
+      "h3",
+      {
+        id: "title",
+        onMouseEnter: () => console.log("mouse enter"),
+      },
+      "Hello I'am a span"
+    );
 
-    const btn = React.createElement("button", { id: "btn" }, "Click me");
+    // 버튼 요소를 생성하고 클릭 시 콘솔에 메시지를 출력하는 이벤트를 추가합니다.
+    const btn = React.createElement(
+      "button",
+      {
+        onClick: () => console.log("im clicked"),
+        style: { backgroundColor: "red" },
+      },
+      "Click me"
+    );
 
-    ReactDOM.render(btn, root);
+    // [h3, btn]는 요소들의 배열입니다.
+    const container = React.createElement("div", null, [h3, btn]);
+
+    // container 요소를 root에 렌더링합니다.
+    ReactDOM.render(container, root);
   </script>
 </html>

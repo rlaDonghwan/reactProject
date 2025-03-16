@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+    <!-- React 컴포넌트를 렌더링할 루트 요소 -->
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <!-- React 라이브러리 -->
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <!-- ReactDOM 라이브러리 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Babel 컴파일러 -->
+
+  <script type="text/babel">
+    const root = document.getElementById("root"); // 루트 요소를 가져옴
+
+    const Title = (
+      <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+        {" "}
+        // 마우스가 요소에 들어올 때 콘솔에 메시지를 출력 Hello iam a title
+      </h3>
+    );
+
+    const Button = (
+      <button
+        style={{
+          backgroundColor: "red", // 버튼의 배경색을 빨간색으로 설정
+        }}
+        onClick={() => console.log("im clicked")} // 버튼 클릭 시 콘솔에 메시지를 출력
+      >
+        Click me
+      </button>
+    );
+
+    // [h3, btn]는 요소들의 배열입니다.
+    const container = React.createElement("div", null, [Title, Button]); // Title과 Button 요소를 포함하는 div 요소 생성
+
+    // container 요소를 root에 렌더링합니다.
+    ReactDOM.render(container, root); // container 요소를 root 요소에 렌더링
+  </script>
+</html>

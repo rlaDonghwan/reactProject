@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    const Title = (
+      <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+        Hello iam a title
+      </h3>
+    );
+
+    const Button = (
+      <button
+        style={{
+          backgroundColor: "red",
+        }}
+        onClick={() => console.log("im clicked")}
+      >
+        Click me
+      </button>
+    );
+
+    // [h3, btn]는 요소들의 배열입니다.
+    const container = React.createElement("div", null, [Title, Button]);
+
+    // container 요소를 root에 렌더링합니다.
+    ReactDOM.render(container, root);
+  </script>
+</html>
