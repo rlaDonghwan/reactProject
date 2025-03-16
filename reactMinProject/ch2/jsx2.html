@@ -10,13 +10,17 @@
   <script type="text/babel">
     const root = document.getElementById("root");
 
-    const Title = (
-      <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
-        Hello iam a title
-      </h3>
-    );
+    // Title 컴포넌트를 정의합니다.
+    function Title() {
+      return (
+        <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+          Hello iam a title
+        </h3>
+      );
+    }
 
-    const Button = (
+    // Button 컴포넌트를 정의합니다.
+    const Button = () => (
       <button
         style={{
           backgroundColor: "red",
@@ -27,10 +31,17 @@
       </button>
     );
 
-    // [h3, btn]는 요소들의 배열입니다.
-    const container = React.createElement("div", null, [Title, Button]);
+    // Container 컴포넌트를 정의합니다.
+    // const에서 화살표만 달아줘도 함수로 인식
+    const Container = () => {
+      <div>
+        {/* 소문자는 html 태그로 인식 */}
+        <button>Click me</button>
+        <Title /> <Button />
+      </div>;
+    };
 
     // container 요소를 root에 렌더링합니다.
-    ReactDOM.render(container, root);
+    ReactDOM.render(<Container />, root);
   </script>
 </html>
