@@ -10,38 +10,25 @@
   <script type="text/babel">
     const root = document.getElementById("root");
 
-    // Title 컴포넌트를 정의합니다.
-    function Title() {
-      return (
-        <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
-          Hello iam a title
-        </h3>
-      );
+    let counter = 0;
+
+    function countUp() {
+      counter++;
+      render();
     }
 
-    // Button 컴포넌트를 정의합니다.
-    const Button = () => (
-      <button
-        style={{
-          backgroundColor: "red",
-        }}
-        onClick={() => console.log("im clicked")}
-      >
-        Click me
-      </button>
+    function render() {
+      ReactDOM.render(<Container />, root);
+    }
+
+    const Container = () => (
+      <div>
+        <h3>Total clicks: {counter}</h3>
+        <button onClick={countUp}>Click me</button>
+      </div>
     );
 
-    // Container 컴포넌트를 정의합니다.
-    // const에서 화살표만 달아줘도 함수로 인식
-    const Container = () => {
-      <div>
-        {/* 소문자는 html 태그로 인식 */}
-        <button>Click me</button>
-        <Title /> <Button />
-      </div>;
-    };
-
     // container 요소를 root에 렌더링합니다.
-    ReactDOM.render(<Container />, root);
+    render();
   </script>
 </html>

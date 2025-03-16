@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div> <!-- React 컴포넌트가 렌더링될 div 요소 -->
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script> <!-- React 라이브러리 -->
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script> <!-- ReactDOM 라이브러리 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> <!-- Babel 컴파일러 -->
+
+  <script type="text/babel">
+    const root = document.getElementById("root"); // root 요소를 가져옴
+
+    let counter = 0; // 전역 변수 counter 초기화
+
+    function countUp() {
+      counter++; // counter 값을 증가시키는 함수
+    }
+
+    function App() {
+      const [counter, setCounter] = React.useState(0); // React 상태 훅을 사용하여 counter 상태와 setCounter 함수 선언
+      const onClick = () => {
+        setCounter(counter + 1); // 버튼 클릭 시 counter 값을 증가시키는 함수
+      };
+
+      return (
+        <div>
+          <h3>Total clicks: {counter}</h3> // 클릭 횟수를 표시하는 h3 요소
+          <button onClick={onClick}>Click me</button> // 클릭 시 onClick 함수가 호출되는 버튼
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root); // App 컴포넌트를 root 요소에 렌더링
+  </script>
+  </script>
+</html>
