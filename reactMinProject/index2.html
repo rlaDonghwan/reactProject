@@ -8,12 +8,10 @@
 
   <script>
     const root = document.getElementById("root");
-    const span = React.createElement(
-      "span",
-      { id: "cool-span", style: { color: "red" } },
-      "Hello I'am a span"
-    );
+    const span = React.createElement("span", null, "Hello I'am a span");
 
-    ReactDOM.render(span, root);
+    const btn = React.createElement("button", { id: "btn" }, "Click me");
+
+    ReactDOM.render(btn, root);
   </script>
 </html>
