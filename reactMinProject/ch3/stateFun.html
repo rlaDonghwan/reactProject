@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div> <!-- React 컴포넌트가 렌더링될 div 요소 -->
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script> <!-- React 라이브러리 -->
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script> <!-- ReactDOM 라이브러리 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> <!-- Babel 컴파일러 -->
+
+  <script type="text/babel">
+    const root = document.getElementById("root"); // root 요소를 가져옴
+
+    function MinutesToHours() {
+      const [amount, setAmount] = React.useState(0); // React 상태 훅을 사용하여 counter 상태와 setCounter 함수 선언
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (e) => {
+        setAmount(e.target.value);
+      };
+      const reset = () => {
+        setAmount(0);
+      };
+      const onInvert = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <label for="minutes">Minutes</label>
+          <input value={inverted ? Math.round(amount * 60) : amount} // 삼항 연산자를 사용하여 flipped 상태에 따라 분 또는 시간을 표시
+            id="minutes" 
+            placeholder="Minutes" 
+            type="number" 
+            onChange={onChange} 
+            disabled={inverted}
+          />
+          <div>
+            <label for="hours">Hours</label>  
+            <input 
+            value={inverted ? amount: Math.round(amount / 60)} // 삼항 연산자를 사용하여 flipped 상태에 따라 분 또는 시간을 표시
+            id="hours" 
+            placeholder="Hours" 
+            type="number" 
+            onChange={onChange} 
+            disabled={!inverted}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>Invert</button>
+        </div>
+      );
+    }
+
+    function KmToMiles(){
+      return(
+        <h3> KM to Miles </h3>
+      );
+    }
+    
+    function App() {
+      const [index, setIndex] = React.useState("xx"); // React 상태 훅을 사용하여 counter 상태와 setCounter 함수 선언
+      const onSelect =(e) => {
+        setIndex(e.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1> 
+          <select value={index} onChange ={onSelect}>
+            <option value="xx">select u r units</option>
+            <option value="0">Minutes to Hours</option>
+            <option value="1">Km to Miles</option>
+          </select>
+            {index === "0" ? <MinutesToHours /> : null}
+            {index === "1" ? <KmToMiles /> : null}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root); // App 컴포넌트를 root 요소에 렌더링
+  </script>
+  </script>
+</html>
