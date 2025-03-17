@@ -8,6 +8,22 @@ npm i -D @types/chance @types/luxon
 
 npm i -D postcss autoprefixer tailwindcss @tailwindcss/line-clamp daisyui
 
+npm i chance luxon @fontsource/material-icons redux react-redux @reduxjs/toolkit
+
+npm i redux-logger redux-thunk react-router-dom
+
+npm i react-dnd react-dnd-html5-backend
+
+npm i --legacy-peer-deps react-beautiful-dnd
+
+npm i -D @types/chance @types/luxon
+
+npm i -D @types/redux-logger @types/redux-thunk
+
+npm i -D @types/react-dnd @types/react-beautiful-dnd
+
+npm i -D postcss autoprefixer tailwindcss @tailwindcss/line-clamp daisyui
+
 <details>
 <summary><strong>1. 리액트 동작 원리 </strong></summary>
 
@@ -1369,8 +1385,6 @@ export default function Counter() {
 위 코드에서 `useState` 훅을 사용하여 `count` 상태를 관리합니다. `increment` 함수는 `count`를 1 증가시키고, `decrement` 함수는 `count`를 1 감소시킵니다. 버튼을 클릭하면 `count` 값이 변경되어 화면에 반영된다.
 
 ---
-
-
 
 </details>
 
