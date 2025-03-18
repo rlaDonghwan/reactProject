@@ -1,7 +1,5 @@
 import fs from 'fs'
 
-export const makeDir = (dirPath: string) => {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath)
-  }
+export const makeDir = (dirName: string) => {
+  if (false == fs.existsSync(dirName)) fs.mkdirSync(dirName)
 }

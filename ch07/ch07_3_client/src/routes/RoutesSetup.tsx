@@ -8,6 +8,7 @@ import Signup from './Auth/SignUp'
 import Login from './Auth/Login'
 import Logout from './Auth/Logout'
 import NoMatch from './NoMatch'
+import LoadingAndErrorMessage from './LoadingAndErrorMessage'
 
 export default function RoutesSetup() {
   return (
@@ -19,6 +20,7 @@ export default function RoutesSetup() {
           path="/board"
           element={
             <RequireAuth>
+              <LoadingAndErrorMessage />
               <Board />
             </RequireAuth>
           }
