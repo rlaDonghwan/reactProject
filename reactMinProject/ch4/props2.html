@@ -4,22 +4,22 @@
     <div id="root"></div> <!-- React 컴포넌트가 렌더링될 div 요소 -->
   </body>
   <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script> <!-- React 라이브러리 -->
-  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script> <!-- ReactDOM 라이브러리 -->
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.developmentjs"></script> <!-- ReactDOM 라이브러리 -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> <!-- Babel 컴파일러 -->
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script> <!-- prop-types 라이브러리 -->
   <script type="text/babel">
     
-    function Btn({text, onClick}) {
-      console.log(text, "was rendered");
+    function Btn({text, fontSize}) {
       
       return(
         <button
-        onClick={onClick}
          style={{
           backgroundColor: "tomato",
           color:"white",
           padding: "10px 20px",
           border:0,
           borderRadius: 10,
+          fontSize
         }}
         >
         {text}
@@ -27,15 +27,16 @@
       );
     }
     
-    const MemoizedBtn = React.memo(Btn);
+    Btn.propTypes = {
+      text: PropTypes.string.isRequired,
+      fontSize: PropTypes.number.isRequired
+    };
 
     function App() {
-      const [value, setValue] = React.useState("Save Changes");
-      const chagesValue = () => setValue("Revert Changes");
       return (
         <div>
-          <MemoizedBtn text={value}  onClick= {chagesValue} />
-          <MemoizedBtn text="Continue"  />
+          <Btn text="Save Changes" fontSize={30} />
+          <Btn text={14} fontSize={"Continue"} />
         </div>
       );
     }
